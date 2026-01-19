@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1600" height="600" viewBox="0 0 1600 600" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="{{BG0}}" />
+      <stop offset="50%" stop-color="{{BG1}}" />
+      <stop offset="100%" stop-color="{{BG2}}" />
+    </linearGradient>
+
+    <linearGradient id="waveGradient" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="{{WAVE0}}" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="{{WAVE1}}" stop-opacity="0.35" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="1600" height="600" fill="url(#bgGradient)" />
+
+  <!-- Waves -->
+  <path
+    d="M0 430 C 260 360, 520 520, 820 470 C 1100 430, 1380 520, 1600 480 L1600 600 L0 600 Z"
+    fill="url(#waveGradient)"
+  />
+  <path
+    d="M0 360 C 300 320, 560 430, 860 390 C 1160 350, 1380 430, 1600 400"
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-opacity="0.20"
+    stroke-width="6"
+  />
+
+  <!-- Card Container -->
+  <rect
+    x="180" y="150"
+    width="1240" height="300"
+    rx="44"
+    fill="#FFFFFF" fill-opacity="0.28"
+    stroke="#FFFFFF" stroke-opacity="0.90" stroke-width="3"
+  />
+
+  <!-- Badges -->
+  <!--BADGE1_START-->
+  <rect
+    x="600" y="175"
+    width="240" height="54"
+    rx="18"
+    fill="#FFFFFF" fill-opacity="0.20"
+    stroke="#FFFFFF" stroke-opacity="0.70" stroke-width="2"
+  />
+  <text
+    x="720" y="212"
+    text-anchor="middle"
+    font-family="'Hack Nerd Font', 'HackNerdFont', 'DejaVu Sans', 'Arial'"
+    font-size="26"
+    font-weight="600"
+    fill="#FFFFFF"
+  >{{BADGE_1}}</text>
+  <!--BADGE1_END-->
+
+  <!--BADGE2_START-->
+  <rect
+    x="860" y="175"
+    width="240" height="54"
+    rx="18"
+    fill="#FFFFFF" fill-opacity="0.20"
+    stroke="#FFFFFF" stroke-opacity="0.70" stroke-width="2"
+  />
+  <text
+    x="980" y="212"
+    text-anchor="middle"
+    font-family="'Hack Nerd Font', 'HackNerdFont', 'DejaVu Sans', 'Arial'"
+    font-size="26"
+    font-weight="600"
+    fill="#FFFFFF"
+  >{{BADGE_2}}</text>
+  <!--BADGE2_END-->
+
+  <!--BADGE3_START-->
+  <rect
+    x="1120" y="175"
+    width="240" height="54"
+    rx="18"
+    fill="#FFFFFF" fill-opacity="0.20"
+    stroke="#FFFFFF" stroke-opacity="0.70" stroke-width="2"
+  />
+  <text
+    x="1240" y="212"
+    text-anchor="middle"
+    font-family="'Hack Nerd Font', 'HackNerdFont', 'DejaVu Sans', 'Arial'"
+    font-size="26"
+    font-weight="600"
+    fill="#FFFFFF"
+  >{{BADGE_3}}</text>
+  <!--BADGE3_END-->
+
+  <!-- Project Name -->
+  <text
+    x="1360" y="325"
+    text-anchor="end"
+    font-family="'Hack Nerd Font', 'HackNerdFont', 'DejaVu Sans', 'Arial'"
+    font-size="88"
+    font-weight="700"
+    fill="#FFFFFF"
+  >{{PROJECT_NAME}}</text>
+
+  <!-- Tagline -->
+  <text
+    x="1360" y="395"
+    text-anchor="end"
+    font-family="'Hack Nerd Font', 'HackNerdFont', 'DejaVu Sans', 'Arial'"
+    font-size="36"
+    font-weight="400"
+    fill="#FFFFFF"
+    fill-opacity="0.90"
+  >{{TAGLINE}}</text>
+
+</svg>

@@ -1,11 +1,16 @@
 package main
 
 import (
+	"bytes"
+	"context"
 	"embed"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
+
+	"github.com/kanrichan/resvg-go"
 )
 
 //go:embed templates/*.svg
@@ -67,7 +72,55 @@ func generateSVG(metadata *Metadata, theme *ThemePalette, align string, badges [
 }
 
 func convertSVGToPNG(svg string) ([]byte, error) {
-	return nil, fmt.Errorf("PNG conversion not yet implemented")
+	// Try rsvg-convert first (fastest and most reliable)
+	if _, err := exec.LookPath("rsvg-convert"); err == nil {
+		return convertWithRsvgConvert([]byte(svg))
+	}
+
+	// Fallback to resvg-go (pure Go, no external dependencies)
+	return convertWithResvg([]byte(svg))
+}
+
+func convertWithRsvgConvert(svgData []byte) ([]byte, error) {
+	cmd := exec.Command("rsvg-convert", "-f", "png")
+	cmd.Stdin = bytes.NewReader(svgData)
+
+	var out bytes.Buffer
+	var stderr bytes.Buffer
+	cmd.Stdout = &out
+	cmd.Stderr = &stderr
+
+	if err := cmd.Run(); err != nil {
+		return nil, fmt.Errorf("rsvg-convert failed: %w (stderr: %s)", err, stderr.String())
+	}
+
+	return out.Bytes(), nil
+}
+
+func convertWithResvg(svgData []byte) ([]byte, error) {
+	ctx := context.Background()
+	resvgCtx, err := resvg.NewContext(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create resvg context: %w", err)
+	}
+	defer resvgCtx.Close()
+
+	renderer, err := resvgCtx.NewRenderer()
+	if err != nil {
+		return nil, fmt.Errorf("failed to create renderer: %w", err)
+	}
+	defer renderer.Close()
+
+	if err := renderer.LoadSystemFonts(); err != nil {
+		return nil, fmt.Errorf("failed to load system fonts: %w", err)
+	}
+
+	pngData, err := renderer.Render(svgData)
+	if err != nil {
+		return nil, fmt.Errorf("resvg rendering failed: %w", err)
+	}
+
+	return pngData, nil
 }
 
 func writeBannerFiles(projectDir, svg string, png []byte) error {
