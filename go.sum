@@ -1,0 +1,4 @@
+github.com/kanrichan/resvg-go v0.0.1 h1:qXt/ffAcybitiGxELLm40SQ58IW137Fv8WbN/kaooHY=
+github.com/kanrichan/resvg-go v0.0.1/go.mod h1:8duvQiA+s19COisrVUOxxjqNBUvB5y1OUs6P1ujarO0=
+github.com/tetratelabs/wazero v1.4.0 h1:9/MirYvmkJ/zSUOygKY/ia3t+e+RqIZXKbylIby1WYk=
+github.com/tetratelabs/wazero v1.4.0/go.mod h1:0U0G41+ochRKoPKCJlh0jMg1CHkyfK8kDqiirMmKY8A=
