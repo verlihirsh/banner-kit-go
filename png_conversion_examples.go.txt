@@ -1,0 +1,148 @@
+package main
+
+// EXAMPLE IMPLEMENTATIONS FOR PNG CONVERSION
+// Choose one approach based on your requirements
+
+import (
+	"fmt"
+	"os"
+	"os/exec"
+	"path/filepath"
+)
+
+// Option 1: Using external resvg command (RECOMMENDED FOR NOW)
+// Requires: cargo install resvg
+func convertSVGToPNG_ExternalResvg(svg string) ([]byte, error) {
+	tmpDir, err := os.MkdirTemp("", "banner-kit-*")
+	if err != nil {
+		return nil, fmt.Errorf("failed to create temp dir: %w", err)
+	}
+	defer os.RemoveAll(tmpDir)
+
+	svgPath := filepath.Join(tmpDir, "banner.svg")
+	pngPath := filepath.Join(tmpDir, "banner.png")
+
+	if err := os.WriteFile(svgPath, []byte(svg), 0644); err != nil {
+		return nil, fmt.Errorf("failed to write temp SVG: %w", err)
+	}
+
+	if _, err := exec.LookPath("resvg"); err != nil {
+		return nil, fmt.Errorf("resvg not found. Install with: cargo install resvg")
+	}
+
+	cmd := exec.Command("resvg", svgPath, pngPath)
+	if output, err := cmd.CombinedOutput(); err != nil {
+		return nil, fmt.Errorf("resvg failed: %w\nOutput: %s", err, output)
+	}
+
+	png, err := os.ReadFile(pngPath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read PNG: %w", err)
+	}
+
+	return png, nil
+}
+
+// Option 2: Using external inkscape command
+// Requires: brew install inkscape
+func convertSVGToPNG_Inkscape(svg string) ([]byte, error) {
+	tmpDir, err := os.MkdirTemp("", "banner-kit-*")
+	if err != nil {
+		return nil, fmt.Errorf("failed to create temp dir: %w", err)
+	}
+	defer os.RemoveAll(tmpDir)
+
+	svgPath := filepath.Join(tmpDir, "banner.svg")
+	pngPath := filepath.Join(tmpDir, "banner.png")
+
+	if err := os.WriteFile(svgPath, []byte(svg), 0644); err != nil {
+		return nil, fmt.Errorf("failed to write temp SVG: %w", err)
+	}
+
+	if _, err := exec.LookPath("inkscape"); err != nil {
+		return nil, fmt.Errorf("inkscape not found. Install with: brew install inkscape")
+	}
+
+	cmd := exec.Command("inkscape", svgPath, "--export-type=png", "--export-filename="+pngPath)
+	if output, err := cmd.CombinedOutput(); err != nil {
+		return nil, fmt.Errorf("inkscape failed: %w\nOutput: %s", err, output)
+	}
+
+	png, err := os.ReadFile(pngPath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read PNG: %w", err)
+	}
+
+	return png, nil
+}
+
+// Option 3: Pure Go using tdewolff/canvas
+// Add to go.mod: github.com/tdewolff/canvas
+/*
+import (
+	"bytes"
+	"github.com/tdewolff/canvas"
+	"github.com/tdewolff/canvas/renderers"
+)
+
+func convertSVGToPNG_Canvas(svg string) ([]byte, error) {
+	c, err := canvas.ParseSVG(svg)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse SVG: %w", err)
+	}
+
+	var buf bytes.Buffer
+	if err := renderers.Write(&buf, c, canvas.PNG()); err != nil {
+		return nil, fmt.Errorf("failed to render PNG: %w", err)
+	}
+
+	return buf.Bytes(), nil
+}
+*/
+
+// Option 4: Pure Go using oksvg + gg
+// Add to go.mod:
+//   github.com/srwiley/oksvg
+//   github.com/srwiley/rasterx
+//   github.com/fogleman/gg
+/*
+import (
+	"bytes"
+	"image/png"
+
+	"github.com/fogleman/gg"
+	"github.com/srwiley/oksvg"
+	"github.com/srwiley/rasterx"
+)
+
+func convertSVGToPNG_OkSVG(svg string) ([]byte, error) {
+	const width = 1600
+	const height = 600
+
+	icon, err := oksvg.ReadIconStream(bytes.NewReader([]byte(svg)))
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse SVG: %w", err)
+	}
+
+	icon.SetTarget(0, 0, float64(width), float64(height))
+
+	dc := gg.NewContext(width, height)
+	scanner := rasterx.NewScannerGV(width, height, dc.Image(), dc.Image().Bounds())
+	raster := rasterx.NewDasher(width, height, scanner)
+
+	icon.Draw(raster, 1.0)
+
+	var buf bytes.Buffer
+	if err := png.Encode(&buf, dc.Image()); err != nil {
+		return nil, fmt.Errorf("failed to encode PNG: %w", err)
+	}
+
+	return buf.Bytes(), nil
+}
+*/
+
+// To use one of these implementations, replace the stub in generator.go:
+//
+// func convertSVGToPNG(svg string) ([]byte, error) {
+//     return convertSVGToPNG_ExternalResvg(svg)
+// }

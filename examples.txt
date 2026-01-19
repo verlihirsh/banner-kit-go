@@ -1,0 +1,86 @@
+# Usage Examples
+
+## Basic Usage
+
+# Generate with defaults (light theme, center alignment)
+./banner-gen ./my-project
+
+# Generate with specific theme
+./banner-gen ./my-project dark
+./banner-gen ./my-project muted
+./banner-gen ./my-project light
+
+# Generate with specific alignment
+./banner-gen ./my-project light left
+./banner-gen ./my-project light center
+./banner-gen ./my-project light right
+
+# Combine theme and alignment
+./banner-gen ./my-project dark left
+./banner-gen ./my-project muted right
+
+## README.md Format
+
+Your project's README.md should contain:
+
+```markdown
+# My Project
+<!-- banner-title: My Project Name -->
+<!-- banner-tagline: Optional tagline or description -->
+
+Rest of your README...
+```
+
+## Using Nerd Font Icons
+
+Include Nerd Font icons directly in banner-title or banner-tagline:
+
+```markdown
+<!-- banner-title: RocketApp  -->
+<!-- banner-tagline: Fast as lightning  -->
+```
+
+Get icons from: https://www.nerdfonts.com/cheat-sheet
+
+## Output
+
+The command generates two files in your project directory:
+- banner.svg (always generated)
+- banner.png (requires PNG conversion implementation)
+
+## Testing with Original Test Projects
+
+```bash
+# Test with Nerd Font icons
+./banner-gen ~/work/banner-kit/test-projects/nerd-icon-example
+
+# Test with emoji
+./banner-gen ~/work/banner-kit/test-projects/emoji-test dark
+
+# Test with real projects
+./banner-gen ~/work/banner-kit/test-projects/vibetunnel muted
+./banner-gen ~/work/banner-kit/test-projects/verlihirsh-toolkit light left
+```
+
+## Make Targets
+
+```bash
+make build    # Build binary
+make test     # Generate banners for all test projects
+make clean    # Remove binary and generated banners
+make install  # Install to ~/bin or /usr/local/bin
+make run      # Build and show usage
+```
+
+## Comparing with Node.js Version
+
+```bash
+# Generate with Go version
+./banner-gen ./test-project light center
+
+# Generate with Node.js version
+node ~/work/banner-kit/scripts/generate-banners.mjs ./test-project light center
+
+# Compare SVG output (should be identical)
+diff test-project/banner-go.svg test-project/banner-js.svg
+```
